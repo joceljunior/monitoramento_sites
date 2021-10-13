@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 )
 
@@ -10,19 +11,22 @@ func main() {
 	//go run - arquivo main
 	intro()
 
-	showMenu()
+	for {
+		showMenu()
 
-	option := getOption()
-	switch option {
-	case 1:
-		fmt.Println("Monitorando...")
-	case 2:
-		fmt.Println("Exibindo Logs...")
-	case 3:
-		fmt.Println("Fechando o programa...")
-		os.Exit(0) // funcao para fechar um programa
-	default:
-		fmt.Println("Não conheço este comando.")
+		option := getOption()
+		switch option {
+		case 1:
+			startMonitoring()
+		case 2:
+			fmt.Println("Exibindo Logs...")
+		case 3:
+			fmt.Println("Fechando o programa...")
+			os.Exit(0) // funcao para fechar um programa
+		default:
+			fmt.Println("Não conheço este comando.")
+
+		}
 
 	}
 
@@ -45,4 +49,16 @@ func getOption() int {
 	fmt.Scan(&optionRead)
 	fmt.Println("O comando escolhido foi", optionRead)
 	return optionRead
+}
+func startMonitoring() {
+	fmt.Println("Monitorando...")
+	site := "https://www.alura.com.br"
+	// operador _ ignora a variavel que nao estou interessado em funcoes de multiplos valores
+	resp, _ := http.Get(site)
+
+	if resp.StatusCode == 200 {
+		fmt.Println("OK")
+	} else {
+		fmt.Println("Site fora do ar!")
+	}
 }
